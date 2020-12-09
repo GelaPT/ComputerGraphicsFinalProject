@@ -54,6 +54,7 @@ document.addEventListener('keydown', ev=>{
     if(ev.key == "c") {
         camera.ToggleCameraType();
         camera.threeCamera = camera.GetThreeCamera();
+        camera.UpdateThreeCamera();
     }
 })
 

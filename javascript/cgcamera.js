@@ -94,10 +94,15 @@ class CGCamera {
 
 
     GetThreeCamera() {
+        var aspect = window.innerWidth/window.innerHeight;
+
         if(this.cameraType == CAMERA_TYPE.Perspective) {
-            return new THREE.PerspectiveCamera(this.zoom, window.innerWidth/window.innerHeight, 0.1, 1000);
+            return new THREE.PerspectiveCamera(this.zoom, aspect, 0.1, 1000);
         } else {
-            return new THREE.OrthographicCamera(-window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, 0.1, 1000);
+            var depth = Math.tan(this.zoom/2.0 * Math.PI/180) / 2.0;
+            var size_x = depth * 100 * aspect;
+            var size_y = depth * 100;
+            return new THREE.OrthographicCamera(size_x / -2, size_x / 2, size_y / 2, size_y / -2, 1, 1000);
         }
     }
     
@@ -119,6 +124,8 @@ class CGCamera {
         var lookAtVector = CGVector3.Subtract(this.position, this.front);
 
         this.threeCamera.lookAt(lookAtVector.x, lookAtVector.y, lookAtVector.z);
+
+        this.threeCamera.updateProjectionMatrix();
     }
 
     UpdateCamera() {
