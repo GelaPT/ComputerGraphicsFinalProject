@@ -10,9 +10,9 @@ const CAMERA_TYPE = Object.freeze({
     Ortographic: "ortographic"
 });
 
-const YAW = -90.0;
-const PITCH = 0.0;
-const SPEED = 7.5;
+const YAW = 30;
+const PITCH = -90;
+const SPEED = 15;
 const SENSITIVITY = 0.065;
 const ZOOM = 60;
 
@@ -31,7 +31,7 @@ class CGCamera {
         this.movementSpeed = SPEED;
         this.mouseSensitivity = SENSITIVITY;
         this.zoom = ZOOM;
-        
+
         this.cameraType = CAMERA_TYPE.Perspective;
         this.threeCamera = this.GetThreeCamera();
         this.UpdateCamera();
@@ -77,13 +77,13 @@ class CGCamera {
         this.yaw += xOffset;
         this.pitch += yOffset;
 
-        if(this.pitch > 90.0) {
-            this.pitch = 90.0;
+        if(this.pitch >= 89.0) {
+            this.pitch = 89.0;
         }
-        if(this.pitch < -90.0) {
-            this.pitch = -90.0;
+        if(this.pitch <= -89.0) {
+            this.pitch = -89.0;
         }
-        if(this.yaw > 360 || this.yaw < -360) {
+        if(this.yaw <= -360 || this.yaw >= 360) {
             this.yaw = 0;
         }
 
