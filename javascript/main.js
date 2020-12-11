@@ -9,13 +9,20 @@ var importedObject, animationMixer;
 var clock = new THREE.Clock();
 var importer = new THREE.FBXLoader();
 
+var checkMateText = new THREE.TextGeometry("CHECK MATE!", );
+
 importer.load('../models/Chess.fbx', function(object) {
     animationMixer = new THREE.AnimationMixer(object);
 
+    animationMixer.addEventListener('finished', function(ev) {
+        new THREE.TextGeometry();
+    });
+
     var action = animationMixer.clipAction(object.animations[0]);
     action.play();
-
-    action.timeScale = 0.5;
+    action.clampWhenFinished = true;
+    action.loop = THREE.LoopOnce;
+    action.timeScale = 0.6;
 
     object.traverse(function (child) {
         if(child.isMesh) {
@@ -38,8 +45,8 @@ importer.load('../models/Chess.fbx', function(object) {
 var deltaTime = 0, lastTime = 0;
 
 function Start() {
-    camera = new CGCamera(new CGVector3(0, 15, -20), new CGVector3(0, 1, 0), 90.0, 0.0);
-    renderer.setSize(window.innerWidth - 15, window.innerHeight - 15);
+    camera = new CGCamera(new CGVector3(20, 15, 0), new CGVector3(0, 1, 0), 0.0, 30.0);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     
     renderer.domElement.onclick = function() {
@@ -111,13 +118,16 @@ document.addEventListener('keydown', ev=>{
         camera.threeCamera = camera.GetThreeCamera();
         camera.UpdateThreeCamera();
     }
-    if(ev.key == "k") {
-        if(animationMixer) {
-            var action = animationMixer.clipAction(importedObject.animations[0]);
-            action.play();
+    if(ev.key == "r") {
+        animationMixer.clipAction(importedObject.animations[0]).reset();
+    }
+    if(ev.key == " ") {
+        if(animationMixer.timeScale == 0) {
+            animationMixer.timeScale = 0.6;   
+        } else {
+            animationMixer.timeScale = 0;
         }
     }
-
 })
 
 document.addEventListener('wheel', ev=>{
