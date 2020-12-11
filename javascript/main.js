@@ -15,6 +15,8 @@ importer.load('../models/Chess.fbx', function(object) {
     var action = animationMixer.clipAction(object.animations[0]);
     action.play();
 
+    action.timeScale = 0.5;
+
     object.traverse(function (child) {
         if(child.isMesh) {
             child.castShadow = true;
